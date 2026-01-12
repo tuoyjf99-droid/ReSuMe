@@ -1,1 +1,556 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Gallery</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f7f3ed;
+      --paper: #fffaf2;
+      --card: #ffffff;
+      --ink: #2f2a25;
+      --muted: #6f675f;
+      --line: rgba(200, 169, 126, .35);
+      --accent: #c8a97e;
+      --accent2:#b48a57;
+      --shadow: 0 12px 28px rgba(0,0,0,.08);
+      --radius: 18px;
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: "Prompt", system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(200,169,126,.18), transparent 60%),
+        radial-gradient(700px 420px at 85% 20%, rgba(180,138,87,.14), transparent 60%),
+        linear-gradient(180deg, var(--paper), var(--bg));
+      color: var(--ink);
+    }
+
+    /* Top bar */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(247,243,237,.78);
+      border-bottom: 1px solid var(--line);
+    }
+    .header-inner{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 220px;
+    }
+    .logo{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(200,169,126,.95), rgba(180,138,87,.95));
+      box-shadow: 0 10px 20px rgba(200,169,126,.25);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+    .brand h1{
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.1;
+      font-weight: 600;
+    }
+    .brand p{
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .chip{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.7);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      box-shadow: 0 8px 18px rgba(0,0,0,.04);
+    }
+    .chip b{ color: var(--ink); font-weight: 600; }
+    .btn{
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff, #fff7ea);
+      color: var(--ink);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: .2s;
+      box-shadow: 0 10px 22px rgba(0,0,0,.06);
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0); }
+
+    /* Hero */
+    .hero{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 34px 18px 10px;
+    }
+    .hero-card{
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px 22px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero-card:before{
+      content:"";
+      position:absolute;
+      inset:-120px -200px auto auto;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(200,169,126,.25), transparent 60%);
+      transform: rotate(12deg);
+    }
+    .hero h2{
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+    .hero p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 720px;
+    }
+    .meta{
+      display:flex;
+      flex-wrap: wrap;
+      gap:10px;
+      margin-top: 14px;
+    }
+    .tag{
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(200,169,126,.12);
+      border: 1px solid rgba(200,169,126,.22);
+      font-size: 12px;
+      color: #5b4a37;
+    }
+
+    /* Gallery */
+    main{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 18px 56px;
+    }
+    .section-title{
+      margin: 18px 0 14px;
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .section-title h3{
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .section-title small{
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .card{
+      grid-column: span 6;
+      background: rgba(255,255,255,.88);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: .25s;
+      cursor: pointer;
+      position: relative;
+    }
+    .card:hover{ transform: translateY(-4px); }
+
+    .thumb{
+      width: 100%;
+      height: 290px;
+      object-fit: cover;
+      display:block;
+      background: #efe7db;
+    }
+
+    .card-body{
+      padding: 14px 14px 16px;
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .card-body h4{
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .card-body p{
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .pill{
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(255,255,255,.8);
+      border: 1px solid rgba(200,169,126,.25);
+      color: #5b4a37;
+      white-space: nowrap;
+    }
+
+    /* make first card larger on desktop */
+    .card.feature{
+      grid-column: span 12;
+    }
+    .card.feature .thumb{
+      height: 380px;
+    }
+
+    @media (max-width: 900px){
+      .card{ grid-column: span 12; }
+      .card.feature .thumb{ height: 300px; }
+      .thumb{ height: 260px; }
+      .hero h2{ font-size: 24px; }
+    }
+
+    /* Lightbox */
+    .lightbox{
+      position: fixed;
+      inset: 0;
+      background: rgba(25,20,16,.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      z-index: 50;
+    }
+    .lightbox.open{ display:flex; }
+    .lb-card{
+      width: min(1100px, 96vw);
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+      overflow: hidden;
+    }
+    .lb-top{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(200,169,126,.25);
+      background: linear-gradient(180deg, rgba(255,250,242,.9), rgba(255,255,255,.7));
+    }
+    .lb-title{
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .lb-title b{
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lb-title span{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .lb-actions{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .icon-btn{
+      border: 1px solid rgba(200,169,126,.35);
+      background: rgba(255,255,255,.75);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor: pointer;
+      transition: .2s;
+      font-size: 13px;
+    }
+    .icon-btn:hover{ transform: translateY(-1px); }
+    .lb-img{
+      width: 100%;
+      height: min(72vh, 720px);
+      object-fit: contain;
+      background: #0f0e0d;
+      display:block;
+    }
+
+    footer{
+      text-align:center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 22px 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,250,242,.55);
+    }
+
+    a{ color: inherit; }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="logo">PF</div>
+      <div>
+        <h1>Portfolio Gallery</h1>
+        <p>ธีมครีม • สบายตา • ทันสมัย</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="chip">ผลงานทั้งหมด: <b id="count">7</b> ภาพ</div>
+      <button class="btn" id="scrollBtn">ไปที่แกลเลอรี</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-card">
+    <h2>รวมผลงานออกแบบ 3D / Layout Planning</h2>
+    <p>
+      หน้านี้ใช้สำหรับแนบลิงก์ในเรซูเม่/พอร์ตโฟลิโอ สามารถกดดูภาพแบบเต็มจอได้
+      (คลิกที่รูปใดก็ได้)
+    </p>
+    <div class="meta">
+      <div class="tag">Architecture</div>
+      <div class="tag">Interior</div>
+      <div class="tag">3D Visualization</div>
+      <div class="tag">Plan & Layout</div>
+    </div>
+  </div>
+</section>
+
+<main id="gallery">
+  <div class="section-title">
+    <h3>ผลงานของฉัน</h3>
+    <small>คลิกภาพเพื่อขยาย</small>
+  </div>
+
+  <div class="grid" id="grid">
+    <!-- Feature (ใหญ่) -->
+    <article class="card feature" data-src="144742.png" data-title="ผลงานเด่น" data-desc="3D / Visualization">
+      <img class="thumb" src="144742.png" alt="144742" loading="lazy">
+      <div class="card-body">
+        <div>
+          <h4>ผลงานเด่น</h4>
+          <p>3D / Visualization</p>
+        </div>
+        <div class="pill">Featured</div>
+      </div>
+    </article>
+
+    <!-- ที่เหลือ -->
+    <article class="card" data-src="144731.png" data-title="งานออกแบบ" data-desc="Facade / Exterior">
+      <img class="thumb" src="144731.png" alt="144731" loading="lazy">
+      <div class="card-body">
+        <div>
+          <h4>งานออกแบบ</h4>
+          <p>Facade / Exterior</p>
+        </div>
+        <div class="pill">01</div>
+      </div>
+    </article>
+
+    <article class="card" data-src="144708.png" data-title="งานออกแบบ" data-desc="Pavilion / Space">
+      <img class="thumb" src="144708.png" alt="144708" loading="lazy">
+      <div class="card-body">
+        <div>
+          <h4>งานออกแบบ</h4>
+          <p>Pavilion / Space</p>
+        </div>
+        <div class="pill">02</div>
+      </div>
+    </article>
+
+    <article class="card" data-src="144648.png" data-title="Interior" data-desc="Bedroom + Plan">
+      <img class="thumb" src="144648.png" alt="144648" loading="lazy">
+      <div class="card-body">
+        <div>
+          <h4>Interior</h4>
+          <p>Bedroom + Plan</p>
+        </div>
+        <div class="pill">03</div>
+      </div>
+    </article>
+
+    <article class="card" data-src="144627.png" data-title="Interior" data-desc="Living Room + Plan">
+      <img class="thumb" src="144627.png" alt="144627" loading="lazy">
+      <div class="card-body">
+        <div>
+          <h4>Interior</h4>
+          <p>Living Room + Plan</p>
+        </div>
+        <div class="pill">04</div>
+      </div>
+    </article>
+
+    <article class="card" data-src="144547.png" data-title="Interior" data-desc="Kitchen + Plan">
+      <img class="thumb" src="144547.png" alt="144547" loading="lazy">
+      <div class="card-body">
+        <div>
+          <h4>Interior</h4>
+          <p>Kitchen + Plan</p>
+        </div>
+        <div class="pill">05</div>
+      </div>
+    </article>
+
+    <article class="card" data-src="144525.png" data-title="Interior" data-desc="Bathroom + Plan">
+      <img class="thumb" src="144525.png" alt="144525" loading="lazy">
+      <div class="card-body">
+        <div>
+          <h4>Interior</h4>
+          <p>Bathroom + Plan</p>
+        </div>
+        <div class="pill">06</div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<footer>
+  © <span id="year"></span> • Portfolio Gallery • Hosted on GitHub Pages
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lb-card" role="dialog" aria-modal="true">
+    <div class="lb-top">
+      <div class="lb-title">
+        <b id="lbTitle">ภาพผลงาน</b>
+        <span id="lbDesc">คลิกปุ่มปิด หรือกด Esc</span>
+      </div>
+      <div class="lb-actions">
+        <button class="icon-btn" id="prevBtn" title="ก่อนหน้า">←</button>
+        <button class="icon-btn" id="nextBtn" title="ถัดไป">→</button>
+        <a class="icon-btn" id="openRaw" href="#" target="_blank" title="เปิดภาพในแท็บใหม่">Open</a>
+        <button class="icon-btn" id="closeBtn" title="ปิด">✕</button>
+      </div>
+    </div>
+    <img class="lb-img" id="lbImg" src="" alt="preview">
+  </div>
+</div>
+
+<script>
+  // Simple gallery/lightbox
+  const cards = Array.from(document.querySelectorAll(".card"));
+  const lightbox = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lbImg");
+  const lbTitle = document.getElementById("lbTitle");
+  const lbDesc = document.getElementById("lbDesc");
+  const openRaw = document.getElementById("openRaw");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const closeBtn = document.getElementById("closeBtn");
+
+  let currentIndex = 0;
+
+  document.getElementById("count").textContent = cards.length.toString();
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  document.getElementById("scrollBtn").addEventListener("click", () => {
+    document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
+  });
+
+  function openAt(index){
+    currentIndex = (index + cards.length) % cards.length;
+    const c = cards[currentIndex];
+    const src = c.dataset.src;
+    lbImg.src = src;
+    lbTitle.textContent = c.dataset.title || "ผลงาน";
+    lbDesc.textContent = c.dataset.desc || "คลิกปุ่มปิด หรือกด Esc";
+    openRaw.href = src;
+
+    lightbox.classList.add("open");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function close(){
+    lightbox.classList.remove("open");
+    lightbox.setAttribute("aria-hidden", "true");
+    lbImg.src = "";
+    document.body.style.overflow = "";
+  }
+
+  function next(){ openAt(currentIndex + 1); }
+  function prev(){ openAt(currentIndex - 1); }
+
+  cards.forEach((c, idx) => c.addEventListener("click", () => openAt(idx)));
+  nextBtn.addEventListener("click", next);
+  prevBtn.addEventListener("click", prev);
+  closeBtn.addEventListener("click", close);
+
+  lightbox.addEventListener("click", (e) => {
+    if(e.target === lightbox) close();
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if(!lightbox.classList.contains("open")) return;
+    if(e.key === "Escape") close();
+    if(e.key === "ArrowRight") next();
+    if(e.key === "ArrowLeft") prev();
+  });
+</script>
+
+</body>
+</html>
 
